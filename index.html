@@ -1,362 +1,200 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Interactive Product Card Exercise</title>
-    <!-- Import Tailwind CSS for rapid styling -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Import Google Fonts (Inter) -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <!-- Import Phosphor Icons for UI elements -->
-    <script src="https://unpkg.com/@phosphor-icons/web"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                    },
-                    colors: {
-                        primary: '#4F46E5', // Indigo 600
-                        primaryHover: '#4338CA', // Indigo 700
-                    },
-                    animation: {
-                        'pulse-fast': 'pulse 1s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-                    }
-                }
-            }
-        }
-    </script>
-    <style>
-        /* Custom CSS for elements that are tricky with utility classes alone */
-        body {
-            background-color: #F3F4F6; /* Gray 100 */
-        }
-        
-        /* Smooth transition for the product image */
-        .product-image {
-            transition: transform 0.5s ease;
-        }
-        
-        .product-card:hover .product-image {
-            transform: scale(1.05);
-        }
-
-        /* Hide scrollbar for the thumbnail container but keep functionality */
-        .thumbnail-container::-webkit-scrollbar {
-            display: none;
-        }
-        .thumbnail-container {
-            -ms-overflow-style: none;
-            scrollbar-width: none;
-        }
-        
-        /* Notification toast animation */
-        @keyframes slideInUp {
-            from { transform: translateY(100%); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
-        @keyframes fadeOut {
-            from { opacity: 1; }
-            to { opacity: 0; }
-        }
-        .toast-enter {
-            animation: slideInUp 0.3s ease-out forwards;
-        }
-        .toast-exit {
-            animation: fadeOut 0.3s ease-out forwards;
-        }
-    </style>
+    <meta name="description" content="Test your HTML, CSS, and JavaScript fundamentals with this interactive frontend quiz.">
+    <meta name="theme-color" content="#0b1020">
+    <title>Frontend Quiz | Practice Edition</title>
+    <link rel="stylesheet" href="index.css">
+    <script src="index.js" defer></script>
 </head>
-<body class="min-h-screen flex items-center justify-center p-4 antialiased text-gray-900">
 
-    <!-- 
-        EXERCISE INSTRUCTIONS FOR STUDENTS:
-        1. Review the HTML structure and Tailwind classes.
-        2. Understand how Flexbox and Grid are used for layout.
-        3. Examine the JavaScript logic for interactivity.
-        4. Tasks:
-           - Add a new color option (e.g., 'Green') and handle its logic.
-           - Implement a 'Quantity' selector (+ / - buttons).
-           - Update the total price dynamically based on quantity.
-    -->
-    <div class="product-card bg-white rounded-2xl shadow-xl overflow-hidden max-w-4xl w-full flex flex-col md:flex-row relative">
-        
-        <!-- Left Side: Image Gallery -->
-        <div class="md:w-1/2 bg-gray-50 p-6 flex flex-col items-center justify-center relative overflow-hidden group">
-            
-            <!-- Favorite Button -->
-            <button id="favoriteBtn" class="absolute top-4 right-4 z-10 p-2 rounded-full bg-white shadow-md text-gray-400 hover:text-red-500 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2" aria-label="Add to favorites">
-                <i class="ph ph-heart text-2xl" id="favoriteIcon"></i>
-            </button>
+<body>
+    <main class="app-shell">
+        <header class="site-header">
+            <a class="brand" href="#" aria-label="Frontend Quiz home">
+                <span class="brand-mark" aria-hidden="true">F</span>
+                <span class="brand-copy">
+                    <strong>Frontend Quiz</strong>
+                    <span>Practice edition</span>
+                </span>
+            </a>
+            <span class="header-note">A little practice goes a long way.</span>
+        </header>
 
-            <!-- Main Product Image -->
-            <div class="relative w-full aspect-square flex items-center justify-center mb-6">
-                <!-- Using a placeholder, students can replace with a real image -->
-                <img id="mainImage" src="https://placehold.co/500x500/1f2937/ffffff?text=Premium+Headphones\n(Space+Gray)" alt="Premium Wireless Headphones" class="product-image max-w-[80%] max-h-[80%] object-contain drop-shadow-2xl">
-            </div>
-
-            <!-- Thumbnail Selection -->
-            <div class="thumbnail-container flex gap-4 overflow-x-auto w-full pb-2 px-2 snap-x">
-                <button class="thumb-btn flex-shrink-0 w-20 h-20 rounded-xl border-2 border-primary overflow-hidden snap-center focus:outline-none" data-image="https://placehold.co/500x500/1f2937/ffffff?text=Premium+Headphones\n(Space+Gray)" data-color="Space Gray">
-                    <img src="https://placehold.co/150x150/1f2937/ffffff?text=Gray" alt="Gray view" class="w-full h-full object-cover">
-                </button>
-                <button class="thumb-btn flex-shrink-0 w-20 h-20 rounded-xl border-2 border-transparent hover:border-gray-300 overflow-hidden snap-center focus:outline-none" data-image="https://placehold.co/500x500/e5e7eb/1f2937?text=Premium+Headphones\n(Silver)" data-color="Silver">
-                    <img src="https://placehold.co/150x150/e5e7eb/1f2937?text=Silver" alt="Silver view" class="w-full h-full object-cover">
-                </button>
-                 <button class="thumb-btn flex-shrink-0 w-20 h-20 rounded-xl border-2 border-transparent hover:border-gray-300 overflow-hidden snap-center focus:outline-none" data-image="https://placehold.co/500x500/000000/ffffff?text=Premium+Headphones\n(Midnight+Black)" data-color="Midnight Black">
-                    <img src="https://placehold.co/150x150/000000/ffffff?text=Black" alt="Black view" class="w-full h-full object-cover">
-                </button>
-            </div>
-        </div>
-
-        <!-- Right Side: Product Details -->
-        <div class="md:w-1/2 p-8 md:p-10 flex flex-col justify-between">
-            <div>
-                <div class="flex justify-between items-start mb-2">
-                    <div>
-                        <span class="text-sm font-semibold text-primary uppercase tracking-wider">Audio Equipment</span>
-                        <h1 class="text-3xl font-bold text-gray-900 mt-1 mb-2">Aura Studio Pro</h1>
-                    </div>
-                    <!-- Status Badge -->
-                    <span class="bg-green-100 text-green-800 text-xs font-semibold px-2.5 py-0.5 rounded-full flex items-center gap-1">
-                        <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse-fast"></span>
-                        In Stock
-                    </span>
-                </div>
-                
-                <!-- Ratings -->
-                <div class="flex items-center gap-2 mb-6">
-                    <div class="flex text-yellow-400 text-lg">
-                        <i class="ph-fill ph-star"></i>
-                        <i class="ph-fill ph-star"></i>
-                        <i class="ph-fill ph-star"></i>
-                        <i class="ph-fill ph-star"></i>
-                        <i class="ph-fill ph-star-half"></i>
-                    </div>
-                    <span class="text-sm text-gray-500 hover:text-gray-700 cursor-pointer underline decoration-dotted transition-colors">(128 reviews)</span>
-                </div>
-
-                <!-- Price -->
-                <div class="mb-6">
-                    <span class="text-4xl font-bold text-gray-900">$299.00</span>
-                    <span class="text-sm text-gray-500 line-through ml-2">$349.00</span>
-                </div>
-
-                <p class="text-gray-600 mb-8 leading-relaxed">
-                    Experience pure, uninterrupted sound with industry-leading active noise cancellation. Features plush memory foam earcups and up to 40 hours of battery life for all-day comfort.
+        <section class="screen intro-screen" id="intro-screen" aria-labelledby="intro-title">
+            <div class="intro-content">
+                <p class="eyebrow"><span class="eyebrow-dot"></span> INTERACTIVE FRONTEND CHALLENGE</p>
+                <h1 id="intro-title">How strong are your frontend fundamentals?</h1>
+                <p class="intro-description">
+                    Take a thoughtful, no-pressure quiz covering the building blocks of the web.
+                    Learn from every answer and see your results by topic.
                 </p>
 
-                <!-- Color Selection -->
-                <div class="mb-8">
-                    <h3 class="text-sm font-medium text-gray-900 mb-3 flex items-center justify-between">
-                        Color
-                        <span id="selectedColorText" class="text-gray-500 font-normal">Space Gray</span>
-                    </h3>
-                    <div class="flex items-center gap-3">
-                        <button class="color-btn w-8 h-8 rounded-full bg-gray-800 focus:outline-none ring-2 ring-offset-2 ring-gray-800 transition-all" data-color-name="Space Gray" aria-label="Select Space Gray"></button>
-                        <button class="color-btn w-8 h-8 rounded-full bg-gray-200 focus:outline-none ring-0 hover:ring-2 ring-offset-2 ring-gray-300 transition-all" data-color-name="Silver" aria-label="Select Silver"></button>
-                        <button class="color-btn w-8 h-8 rounded-full bg-black focus:outline-none ring-0 hover:ring-2 ring-offset-2 ring-gray-500 transition-all" data-color-name="Midnight Black" aria-label="Select Midnight Black"></button>
+                <div class="topic-list" aria-label="Quiz topics">
+                    <span class="topic-chip topic-html"><span>05</span> HTML</span>
+                    <span class="topic-chip topic-css"><span>10</span> CSS</span>
+                    <span class="topic-chip topic-js"><span>05</span> JavaScript</span>
+                </div>
+
+                <div class="quiz-details">
+                    <div class="detail-item">
+                        <span class="detail-icon" aria-hidden="true">20</span>
+                        <span><strong>Questions</strong><small>Across 3 topics</small></span>
                     </div>
+                    <div class="detail-item">
+                        <span class="detail-icon detail-icon-clock" aria-hidden="true">◷</span>
+                        <span><strong>Elapsed timer</strong><small>Starts when you do</small></span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-icon detail-icon-review" aria-hidden="true">↺</span>
+                        <span><strong>Review anytime</strong><small>Change answers as you go</small></span>
+                    </div>
+                </div>
+
+                <button class="primary-button" id="start-button" type="button">
+                    Start the quiz <span aria-hidden="true">→</span>
+                </button>
+                <p class="start-hint">Choose an answer to unlock the next question. You can revisit earlier answers.</p>
+            </div>
+            <div class="intro-art" aria-hidden="true">
+                <div class="orbit orbit-one"></div>
+                <div class="orbit orbit-two"></div>
+                <div class="code-card">
+                    <span class="code-dots"><i></i><i></i><i></i></span>
+                    <span class="code-line code-line-long"></span>
+                    <span class="code-line code-line-medium"></span>
+                    <span class="code-line code-line-short"></span>
+                    <span class="code-line code-line-medium"></span>
+                    <span class="code-line code-line-tiny"></span>
+                    <span class="code-cursor"></span>
+                </div>
+                <span class="float-tag tag-html">&lt;/&gt; HTML</span>
+                <span class="float-tag tag-css"># CSS</span>
+                <span class="float-tag tag-js">JS()</span>
+            </div>
+        </section>
+
+        <section class="screen quiz-screen hidden" id="quiz-screen" aria-labelledby="question-text">
+            <div class="quiz-toolbar">
+                <p class="quiz-kicker">FRONTEND FUNDAMENTALS</p>
+                <div class="quiz-stats">
+                    <span class="progress-label" id="progress-label">Question 1 of 20</span>
+                    <div class="quiz-stat-group">
+                        <span class="score-pill"><span class="score-dot"></span><span id="score-value">0</span> correct</span>
+                        <span class="timer-pill" role="timer" aria-label="Elapsed time" aria-live="off">
+                            <span class="timer-icon" aria-hidden="true">◷</span>
+                            <span class="timer-label">TIME</span>
+                            <time id="timer-value" datetime="PT0S">00:00</time>
+                        </span>
+                    </div>
+                </div>
+                <div class="progress-track" role="progressbar" aria-label="Quiz progress" aria-valuemin="0"
+                    aria-valuemax="20" aria-valuenow="0">
+                    <span class="progress-fill" id="progress-fill"></span>
                 </div>
             </div>
 
-            <!-- Action Buttons -->
-            <div class="mt-auto pt-6 border-t border-gray-100 flex gap-4">
-                <button id="addToCartBtn" class="flex-1 bg-primary hover:bg-primaryHover text-white font-semibold py-3 px-6 rounded-xl shadow-lg shadow-indigo-200 transition-all duration-200 flex items-center justify-center gap-2 transform active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2">
-                    <i class="ph ph-shopping-cart-simple text-xl"></i>
-                    Add to Cart
+            <div class="quiz-layout">
+                <section class="question-panel">
+                    <div class="question-panel-top">
+                        <span class="live-label"><span></span> YOUR QUESTION</span>
+                        <span class="question-counter" id="question-counter">01 / 20</span>
+                    </div>
+                    <div class="question-copy">
+                        <span class="category-label" id="question-category">JavaScript</span>
+                        <h1 id="question-text" tabindex="-1">Question text</h1>
+                        <p class="question-prompt">Take your time. You can change your answer before moving on.</p>
+                    </div>
+                    <div class="question-decoration" aria-hidden="true">
+                        <span></span><span></span><span></span><span></span><span></span>
+                    </div>
+                    <p class="question-index" aria-hidden="true">01</p>
+                </section>
+
+                <section class="answer-panel" aria-label="Answer choices">
+                    <div class="answer-heading">
+                        <div>
+                            <p class="answer-overline">YOUR MOVE</p>
+                            <h2>Choose one answer</h2>
+                        </div>
+                        <span class="keyboard-hint" aria-label="Use keys 1 through 4">1–4 <span>keys</span></span>
+                    </div>
+
+                    <div class="options-list" id="options-list" role="group" aria-label="Answer choices">
+                        <button class="option" type="button" aria-pressed="false">
+                            <span class="option-key" aria-hidden="true">A</span><span class="option-text"></span>
+                        </button>
+                        <button class="option" type="button" aria-pressed="false">
+                            <span class="option-key" aria-hidden="true">B</span><span class="option-text"></span>
+                        </button>
+                        <button class="option" type="button" aria-pressed="false">
+                            <span class="option-key" aria-hidden="true">C</span><span class="option-text"></span>
+                        </button>
+                        <button class="option" type="button" aria-pressed="false">
+                            <span class="option-key" aria-hidden="true">D</span><span class="option-text"></span>
+                        </button>
+                    </div>
+
+                    <div class="feedback hidden" id="feedback" role="status" aria-live="polite" aria-atomic="true">
+                        <span class="feedback-icon" id="feedback-icon" aria-hidden="true"></span>
+                        <div>
+                            <h3 id="feedback-title"></h3>
+                            <p id="feedback-explanation"></p>
+                        </div>
+                    </div>
+
+                    <div class="quiz-controls">
+                        <button class="secondary-button hidden" id="previous-button" type="button">
+                            <span aria-hidden="true">←</span> Previous
+                        </button>
+                        <button class="primary-button next-button hidden" id="next-button" type="button">
+                            Next question <span aria-hidden="true">→</span>
+                        </button>
+                    </div>
+                    <p class="review-note hidden" id="review-note">Review mode — your saved answers can’t be changed.</p>
+                </section>
+            </div>
+        </section>
+
+        <section class="screen results-screen hidden" id="results-screen" aria-labelledby="results-title">
+            <div class="results-heading">
+                <p class="eyebrow"><span class="eyebrow-dot"></span> QUIZ COMPLETE</p>
+                <h1 id="results-title" tabindex="-1">Nice work. That’s a wrap.</h1>
+                <p id="results-message">Here’s how you did across the frontend fundamentals.</p>
+            </div>
+
+            <div class="results-summary">
+                <div class="total-score-card">
+                    <span class="result-label">YOUR SCORE</span>
+                    <div class="score-line"><strong id="final-score">0</strong><span>/ 20</span></div>
+                    <span class="score-percent" id="score-percent">0% correct</span>
+                    <span class="completed-time" id="final-duration">Completed in 00:00</span>
+                </div>
+                <div class="topic-results">
+                    <h2>Score by topic</h2>
+                    <div id="topic-results-list"></div>
+                </div>
+            </div>
+
+            <div class="results-actions">
+                <button class="primary-button" id="review-button" type="button">
+                    Review my answers <span aria-hidden="true">↗</span>
+                </button>
+                <button class="secondary-button" id="restart-button" type="button">
+                    <span aria-hidden="true">↻</span> Play again
                 </button>
             </div>
-            
-            <!-- Features list -->
-            <ul class="mt-6 flex flex-col gap-2 text-sm text-gray-500">
-                <li class="flex items-center gap-2"><i class="ph ph-truck text-lg text-gray-400"></i> Free shipping worldwide</li>
-                <li class="flex items-center gap-2"><i class="ph ph-arrow-u-up-left text-lg text-gray-400"></i> 30-day return policy</li>
-            </ul>
-        </div>
-    </div>
+        </section>
 
-    <!-- Notification Toast Container -->
-    <div id="toastContainer" class="fixed bottom-4 right-4 flex flex-col gap-2 z-50 pointer-events-none">
-        <!-- Toasts will be injected here via JS -->
-    </div>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            // DOM Elements
-            const mainImage = document.getElementById('mainImage');
-            const thumbBtns = document.querySelectorAll('.thumb-btn');
-            const colorBtns = document.querySelectorAll('.color-btn');
-            const selectedColorText = document.getElementById('selectedColorText');
-            const favoriteBtn = document.getElementById('favoriteBtn');
-            const favoriteIcon = document.getElementById('favoriteIcon');
-            const addToCartBtn = document.getElementById('addToCartBtn');
-            const toastContainer = document.getElementById('toastContainer');
-
-            // State
-            let isFavorited = false;
-            let currentColor = 'Space Gray';
-
-            // --- Image Gallery Logic ---
-            
-            // Function to update main image and active thumbnail
-            const updateImage = (imageUrl, colorName, clickedThumbBtn) => {
-                // Fade out slightly
-                mainImage.style.opacity = '0.5';
-                
-                setTimeout(() => {
-                    mainImage.src = imageUrl;
-                    mainImage.style.opacity = '1';
-                }, 150);
-
-                // Update thumbnail styling
-                thumbBtns.forEach(btn => {
-                    btn.classList.remove('border-primary');
-                    btn.classList.add('border-transparent');
-                });
-                if(clickedThumbBtn) {
-                     clickedThumbBtn.classList.remove('border-transparent');
-                     clickedThumbBtn.classList.add('border-primary');
-                }
-
-                // Sync color text if needed
-                if(colorName) {
-                    updateColorSelection(colorName, false);
-                }
-            };
-
-            // Thumbnail click events
-            thumbBtns.forEach(btn => {
-                btn.addEventListener('click', function() {
-                    const imageUrl = this.getAttribute('data-image');
-                    const colorName = this.getAttribute('data-color');
-                    updateImage(imageUrl, colorName, this);
-                });
-            });
-
-
-            // --- Color Selection Logic ---
-
-            const updateColorSelection = (colorName, updateImageAlso = true) => {
-                currentColor = colorName;
-                selectedColorText.textContent = colorName;
-
-                // Update styling for color buttons
-                colorBtns.forEach(btn => {
-                    if (btn.getAttribute('data-color-name') === colorName) {
-                        // Apply active ring styles based on button color
-                        const ringColor = btn.classList.contains('bg-gray-200') ? 'ring-gray-300' : 
-                                          btn.classList.contains('bg-black') ? 'ring-gray-500' : 'ring-gray-800';
-                        
-                        btn.classList.remove('ring-0', 'hover:ring-2');
-                        btn.classList.add('ring-2', ringColor);
-                    } else {
-                        // Remove active styles
-                        btn.className = btn.className.replace(/ring-gray-\d+/g, '');
-                        btn.classList.remove('ring-2');
-                        btn.classList.add('ring-0', 'hover:ring-2', 'ring-gray-300'); // Default hover
-                    }
-                });
-
-                // Find corresponding thumbnail and update image if requested
-                if (updateImageAlso) {
-                    const matchingThumb = Array.from(thumbBtns).find(btn => btn.getAttribute('data-color') === colorName);
-                    if (matchingThumb) {
-                        updateImage(matchingThumb.getAttribute('data-image'), null, matchingThumb);
-                    }
-                }
-            };
-
-            // Color button click events
-            colorBtns.forEach(btn => {
-                btn.addEventListener('click', function() {
-                    const colorName = this.getAttribute('data-color-name');
-                    updateColorSelection(colorName);
-                });
-            });
-
-
-            // --- Interactions ---
-
-            // Favorite Button Logic
-            favoriteBtn.addEventListener('click', () => {
-                isFavorited = !isFavorited;
-                
-                if (isFavorited) {
-                    favoriteIcon.classList.remove('ph');
-                    favoriteIcon.classList.add('ph-fill', 'text-red-500');
-                    favoriteBtn.classList.remove('text-gray-400');
-                    
-                    // Small pop animation
-                    favoriteIcon.style.transform = 'scale(1.2)';
-                    setTimeout(() => favoriteIcon.style.transform = 'scale(1)', 200);
-                    
-                    showToast('Added to your favorites!', 'success');
-                } else {
-                    favoriteIcon.classList.remove('ph-fill', 'text-red-500');
-                    favoriteIcon.classList.add('ph');
-                    favoriteBtn.classList.add('text-gray-400');
-                    showToast('Removed from favorites.', 'info');
-                }
-            });
-
-            // Add to Cart Logic
-            addToCartBtn.addEventListener('click', () => {
-                // Change button state temporarily to show action
-                const originalText = addToCartBtn.innerHTML;
-                addToCartBtn.innerHTML = '<i class="ph-fill ph-check-circle text-xl"></i> Added';
-                addToCartBtn.classList.add('bg-green-600', 'hover:bg-green-700', 'shadow-green-200');
-                addToCartBtn.classList.remove('bg-primary', 'hover:bg-primaryHover', 'shadow-indigo-200');
-
-                showToast(`Added 1x Aura Studio Pro (${currentColor}) to cart`, 'success');
-
-                setTimeout(() => {
-                    addToCartBtn.innerHTML = originalText;
-                    addToCartBtn.classList.remove('bg-green-600', 'hover:bg-green-700', 'shadow-green-200');
-                    addToCartBtn.classList.add('bg-primary', 'hover:bg-primaryHover', 'shadow-indigo-200');
-                }, 2000);
-            });
-
-
-            // --- Utility: Toast Notification System ---
-            
-            function showToast(message, type = 'info') {
-                const toast = document.createElement('div');
-                
-                // Base styles
-                let styles = "toast-enter pointer-events-auto flex items-center gap-3 px-4 py-3 rounded-lg shadow-lg text-sm font-medium text-white max-w-sm w-full";
-                let icon = "";
-
-                if (type === 'success') {
-                    styles += " bg-gray-900";
-                    icon = '<i class="ph-fill ph-check-circle text-green-400 text-lg"></i>';
-                } else {
-                    styles += " bg-gray-800";
-                    icon = '<i class="ph-fill ph-info text-blue-400 text-lg"></i>';
-                }
-
-                toast.className = styles;
-                toast.innerHTML = `
-                    ${icon}
-                    <span>${message}</span>
-                `;
-
-                toastContainer.appendChild(toast);
-
-                // Remove toast after 3 seconds
-                setTimeout(() => {
-                    toast.classList.replace('toast-enter', 'toast-exit');
-                    // Wait for animation to finish before removing from DOM
-                    setTimeout(() => {
-                        if(toastContainer.contains(toast)) {
-                            toastContainer.removeChild(toast);
-                        }
-                    }, 300);
-                }, 3000);
-            }
-        });
-    </script>
+        <footer class="site-footer">
+            <span>Built for curious minds.</span>
+            <span>HTML <i>·</i> CSS <i>·</i> JavaScript</span>
+        </footer>
+    </main>
+    <div class="flower-confetti" id="flower-confetti" aria-hidden="true"></div>
 </body>
+
 </html>
